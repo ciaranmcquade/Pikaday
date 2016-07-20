@@ -262,7 +262,8 @@
         onSelect: null,
         onOpen: null,
         onClose: null,
-        onDraw: null
+        onDraw: null,
+        onDayRender: null,
     },
 
 
@@ -287,6 +288,17 @@
                 arr.push('is-outside-current-month');
             } else {
                 return '<td class="is-empty"></td>';
+            }
+        }
+        if (typeof opts.onRenderDay === 'function') {
+            opts = opts.onRenderDay(opts);
+        }
+        if (opts.hasOwnProperty("customClass")) {
+            if(typeof opts.customClass === 'string') {
+                arr.push(opts.customClass);
+            } 
+            else if (opts.customClass.constructor === Array) {
+                arr = arr.concat(opts.customClass);
             }
         }
         if (opts.isDisabled) {
@@ -1105,7 +1117,8 @@
                         isStartRange: isStartRange,
                         isEndRange: isEndRange,
                         isInRange: isInRange,
-                        showDaysInNextAndPreviousMonths: opts.showDaysInNextAndPreviousMonths
+                        showDaysInNextAndPreviousMonths: opts.showDaysInNextAndPreviousMonths,
+                        onRenderDay: this._o.onRenderDay
                     };
 
                 row.push(renderDay(dayConfig));
